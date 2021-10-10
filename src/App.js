@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import NotesSection from "./modules/Notes.module";
 import SubjectSection from "./modules/Subject.module";
 import TopicSection from "./modules/Topics.module";
