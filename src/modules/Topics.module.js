@@ -13,6 +13,9 @@ function TopicSection(props) {
   const { paramID } = props.match.params;
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!topic) {
+      return;
+    }
     try {
       const docRef = await addDoc(
         collection(db, `subjects/${paramID}/topics`),

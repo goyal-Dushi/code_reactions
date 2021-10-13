@@ -13,6 +13,9 @@ function NotesSection(props) {
   const { subjectID, topicID } = props.match.params;
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!note) {
+      return;
+    }
     try {
       const docRef = await addDoc(
         collection(db, `subjects/${subjectID}/topics/${topicID}/notes`),

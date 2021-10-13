@@ -11,6 +11,9 @@ function SubjectSection() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!subject) {
+      return;
+    }
     console.log("Subject : ", subject);
     try {
       const docRef = await addDoc(collection(db, "subjects"), {
