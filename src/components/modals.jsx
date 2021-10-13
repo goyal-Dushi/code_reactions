@@ -73,9 +73,9 @@ function Modals({ dataState, setModal }) {
                       })
                     }
                     margin={"dense"}
-                    name={"subject"}
-                    placeholder={"Add New Subject"}
-                    label={"Subject"}
+                    name={toEdit}
+                    placeholder={`Add new ${toEdit}`}
+                    label={toEdit}
                   />
                   <Button
                     variant={"contained"}
