@@ -11,12 +11,15 @@ import {
 import { doc, setDoc, deleteDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { db } from "../database/firebase.config";
+import { useDispatch } from "react-redux";
+import { updateSubject } from "../redux/subjectSlice";
 
 function Modals({ dataState, setModal }) {
   const { idURL, status, toEdit, type, field } = dataState;
   const [modalState, setModalState] = useState({
     editField: "",
   });
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (status) {
@@ -26,10 +29,11 @@ function Modals({ dataState, setModal }) {
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
+    if (!modalState?.editField) {
+      return;
+    }
     if (toEdit === "subject") {
-      await setDoc(doc(db, `${idURL}`), {
-        subjectName: modalState?.editField,
-      });
+      dispatch(updateSubject({ idURL, newValue: modalState?.editField }));
     } else if (toEdit === "topic") {
       await setDoc(doc(db, `${idURL}`), {
         topicName: modalState?.editField,
