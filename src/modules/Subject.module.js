@@ -3,11 +3,14 @@ import { collection, query, addDoc, onSnapshot } from "firebase/firestore";
 import { TextField, Container, Button } from "@mui/material";
 import Cards from "../components/cards";
 import { db } from "../database/firebase.config";
+import { setSubjects, addSubject } from "../redux/subjectSlice";
+import { useDispatch, useSelector } from "react-redux";
 import Loading from "../components/loading";
 
 function SubjectSection() {
   const [subject, setSubject] = useState("");
-  const [subjectCardList, setSubjectCardList] = useState([]);
+  const dispatch = useDispatch();
+  const { values } = useSelector((state) => state.rootReducer.subjects);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,13 +18,7 @@ function SubjectSection() {
       return;
     }
     console.log("Subject : ", subject);
-    try {
-      const docRef = await addDoc(collection(db, "subjects"), {
-        subjectName: subject,
-      });
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
+    dispatch(addSubject({ subject }));
     setSubject("");
   };
 
@@ -33,7 +30,7 @@ function SubjectSection() {
       querySnapshot.forEach((doc) => {
         data.push({ id: doc.id, name: doc.get("subjectName") });
       });
-      setSubjectCardList(data);
+      dispatch(setSubjects({ data }));
       data = [];
     });
     return () => {
@@ -67,8 +64,8 @@ function SubjectSection() {
           flexWrap: "wrap",
         }}
         disableGutters>
-        {subjectCardList?.length ? (
-          <Cards dataOf={"subjects"} data={subjectCardList} />
+        {values?.length ? (
+          <Cards dataOf={"subjects"} data={values} />
         ) : (
           <Loading />
         )}
