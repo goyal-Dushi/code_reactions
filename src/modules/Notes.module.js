@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { collection, query, addDoc, onSnapshot } from "firebase/firestore";
+import { collection, query, onSnapshot } from "firebase/firestore";
 import { TextField, Container, Button } from "@mui/material";
 import NotesList from "../components/noteLists";
 import { db } from "../database/firebase.config";
 import { useHistory } from "react-router";
 import Loading from "../components/loading";
+import { useDispatch, useSelector } from "react-redux";
+import { addNote, setnotes } from "../redux/notesSlice";
 
 function NotesSection(props) {
   const [note, setNote] = useState("");
-  const [noteList, setNoteList] = useState([]);
+  const { values } = useSelector((state) => state.rootReducer.notes);
+  const dispatch = useDispatch();
   const history = useHistory();
   const { subjectID, topicID } = props.match.params;
   const handleSubmit = async (e) => {
@@ -16,16 +19,7 @@ function NotesSection(props) {
     if (!note) {
       return;
     }
-    try {
-      const docRef = await addDoc(
-        collection(db, `subjects/${subjectID}/topics/${topicID}/notes`),
-        {
-          noteDesc: note,
-        }
-      );
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
+    dispatch(addNote({ subjectID, topicID, note }));
     setNote("");
   };
 
@@ -39,7 +33,7 @@ function NotesSection(props) {
       querySnapshot.forEach((doc) => {
         data.push({ id: doc.id, name: doc.get("noteDesc") });
       });
-      setNoteList(data);
+      dispatch(setnotes({ data }));
       data = [];
     });
     return () => {
@@ -78,11 +72,11 @@ function NotesSection(props) {
           flexWrap: "wrap",
         }}
         disableGutters>
-        {noteList?.length ? (
+        {values?.length ? (
           <NotesList
             subjectID={subjectID}
             topicID={topicID}
-            notesData={noteList}
+            notesData={values}
           />
         ) : (
           <Loading />
