@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { collection, query, addDoc, onSnapshot } from "firebase/firestore";
+import { collection, query, onSnapshot } from "firebase/firestore";
 import { TextField, Container, Button } from "@mui/material";
 import Cards from "../components/cards";
 import { db } from "../database/firebase.config";
@@ -10,7 +10,7 @@ import Loading from "../components/loading";
 function SubjectSection() {
   const [subject, setSubject] = useState("");
   const dispatch = useDispatch();
-  const { values } = useSelector((state) => state.rootReducer.subjects);
+  const { values } = useSelector((state) => state?.rootReducer.subjects);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
