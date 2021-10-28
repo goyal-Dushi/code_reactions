@@ -8,11 +8,13 @@ import {
   Card,
   CardContent,
 } from "@mui/material";
-import { doc, setDoc, deleteDoc } from "firebase/firestore";
+import { doc, deleteDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { db } from "../database/firebase.config";
 import { useDispatch } from "react-redux";
 import { updateSubject } from "../redux/subjectSlice";
+import { updateTopic } from "../redux/topicsSlice";
+import { updateNote } from "../redux/notesSlice";
 
 function Modals({ dataState, setModal }) {
   const { idURL, status, toEdit, type, field } = dataState;
@@ -35,13 +37,9 @@ function Modals({ dataState, setModal }) {
     if (toEdit === "subject") {
       dispatch(updateSubject({ idURL, newValue: modalState?.editField }));
     } else if (toEdit === "topic") {
-      await setDoc(doc(db, `${idURL}`), {
-        topicName: modalState?.editField,
-      });
+      dispatch(updateTopic({ idURL, newValue: modalState?.editField }));
     } else {
-      await setDoc(doc(db, `${idURL}`), {
-        noteDesc: modalState?.editField,
-      });
+      dispatch(updateNote({ idURL, newValue: modalState?.editField }));
     }
     setModal({ ...dataState, status: false });
   };
