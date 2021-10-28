@@ -1,31 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { collection, query, addDoc, onSnapshot } from "firebase/firestore";
+import { collection, query, onSnapshot } from "firebase/firestore";
 import { TextField, Container, Button } from "@mui/material";
 import Cards from "../components/cards";
 import { db } from "../database/firebase.config";
 import { useHistory } from "react-router";
 import Loading from "../components/loading";
+import { useDispatch, useSelector } from "react-redux";
+import { addTopic, settopics } from "../redux/topicsSlice";
 
 function TopicSection(props) {
   const [topic, setTopic] = useState("");
-  const [topicCardList, setTopicCardList] = useState([]);
+  const { values } = useSelector((state) => state?.rootReducer.topics);
   const history = useHistory();
+  const dispatch = useDispatch();
   const { paramID } = props.match.params;
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!topic) {
       return;
     }
-    try {
-      const docRef = await addDoc(
-        collection(db, `subjects/${paramID}/topics`),
-        {
-          topicName: topic,
-        }
-      );
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
+    dispatch(addTopic({ paramID, topic }));
     setTopic("");
   };
 
@@ -37,7 +31,7 @@ function TopicSection(props) {
       querySnapshot.forEach((doc) => {
         data.push({ id: doc.id, name: doc.get("topicName") });
       });
-      setTopicCardList(data);
+      dispatch(settopics({ data }));
       data = [];
     });
     return () => {
@@ -76,8 +70,8 @@ function TopicSection(props) {
           flexWrap: "wrap",
         }}
         disableGutters>
-        {topicCardList?.length ? (
-          <Cards dataOf={"topics"} data={topicCardList} />
+        {values?.length ? (
+          <Cards dataOf={"topics"} data={values} />
         ) : (
           <Loading />
         )}
