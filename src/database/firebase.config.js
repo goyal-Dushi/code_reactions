@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-// import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIRESTORE_API_KEY,
@@ -9,9 +8,8 @@ const firebaseConfig = {
   storageBucket: "code-reactions-50062.appspot.com",
   messagingSenderId: "152846030819",
   appId: process.env.REACT_APP_FIRESTORE_API_ID,
-  measurementId: "G-ZVYECCFS9N",
+  measurementId: "G-ZL1PX47C0Y",
 };
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
-// const analytics = getAnalytics(app);
