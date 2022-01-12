@@ -22,7 +22,7 @@ export const addNote = createAsyncThunk(
   "notes/addNote",
   async ({ note, subjectID, topicID }) => {
     try {
-      const docRef = await addDoc(
+      await addDoc(
         collection(db, `subjects/${subjectID}/topics/${topicID}/notes`),
         {
           noteDesc: note,

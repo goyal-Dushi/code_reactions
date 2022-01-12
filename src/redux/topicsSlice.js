@@ -22,12 +22,9 @@ export const addTopic = createAsyncThunk(
   "topics/addTopic",
   async ({ topic, paramID }) => {
     try {
-      const docRef = await addDoc(
-        collection(db, `subjects/${paramID}/topics`),
-        {
-          topicName: topic,
-        }
-      );
+      await addDoc(collection(db, `subjects/${paramID}/topics`), {
+        topicName: topic,
+      });
     } catch (e) {
       console.error("Error adding document: ", e);
     }

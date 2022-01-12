@@ -22,7 +22,7 @@ export const addSubject = createAsyncThunk(
   "subjects/addSubject",
   async ({ subject }) => {
     try {
-      const docRef = await addDoc(collection(db, "subjects"), {
+      await addDoc(collection(db, "subjects"), {
         subjectName: subject,
       });
     } catch (e) {
